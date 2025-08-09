@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="HP" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+text = "HP: 100"
+theme_override_font_sizes/font_size = 24
+
+
