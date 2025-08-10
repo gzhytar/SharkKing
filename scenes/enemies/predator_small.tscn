@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource path="res://icon.svg" type="Texture2D" id=1]
+[ext_resource path="res://images/predator-1.png" type="Texture2D" id=1]
 [ext_resource path="res://scripts/ai/predator_small.gd" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
@@ -11,8 +11,7 @@ script = ExtResource(2)
 
 [node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource(1)
-modulate = Color(1, 0.45, 0.45, 1)
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.45, 0.45)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource(1)

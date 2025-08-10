@@ -16,3 +16,7 @@ Pozn.: Pracujeme po malých krocích; vždy řešíme jeden ToDo a teprve po pot
 - [done 2025-08-09] Milestone 1: Scaffold `Player.tscn` (root `CharacterBody2D`)
 - [done 2025-08-09] Milestone 1: Add basic `scripts/player/player.gd` movement skeleton
 - [done 2025-08-09] Milestone 1: Instance `Player.tscn` into `scenes/World.tscn`
+- [done 2025-08-09] Milestone 1: HUD HP/Counts
+- [done 2025-08-09] Milestone 1: Prey spawner + AI
+- [done 2025-08-09] Milestone 1: PredatorSmall + predator spawner
+- [done 2025-08-09] Milestone 2: Parallax background, CanvasModulate tint, Biome manager, bubbles

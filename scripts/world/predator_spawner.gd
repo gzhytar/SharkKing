@@ -1,6 +1,7 @@
 extends Node
 
 @export var predator_scene: PackedScene
+@export var predator_scenes: Array[PackedScene]
 @export var max_predator_count: int = 6
 @export var spawn_interval_seconds: float = 2.5
 @export var min_spawn_distance: float = 900.0
@@ -16,7 +17,8 @@ func _process(delta: float) -> void:
     _try_spawn_predator()
 
 func _try_spawn_predator() -> void:
-    if predator_scene == null:
+    var scene := _pick_scene()
+    if scene == null:
         return
     if _current_predator_count() >= max_predator_count:
         return
@@ -27,14 +29,20 @@ func _try_spawn_predator() -> void:
     if parent_2d == null:
         return
     var pos: Vector2 = _random_point_in_ring(player.global_position, min_spawn_distance, max_spawn_distance)
-    var predator: Node2D = predator_scene.instantiate() as Node2D
+    var predator: Node2D = scene.instantiate() as Node2D
     parent_2d.add_child(predator)
     predator.global_position = pos
+
+func _pick_scene() -> PackedScene:
+    if predator_scenes != null and predator_scenes.size() > 0:
+        var idx := randi() % predator_scenes.size()
+        return predator_scenes[idx]
+    return predator_scene
 
 func _current_predator_count() -> int:
     var count := 0
     for child in get_parent().get_children():
-        if child is CharacterBody2D and child.name.begins_with("PredatorSmall"):
+        if child is CharacterBody2D and child.is_in_group("predator"):
             count += 1
     return count
 

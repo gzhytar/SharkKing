@@ -13,8 +13,20 @@ var _hit_flash_time: float = 0.0
 func _ready() -> void:
     add_to_group("prey")
     randomize()
+    _assign_random_texture()
     _desired_direction = Vector2(randf() * 2.0 - 1.0, randf() * 2.0 - 1.0).normalized()
     _hp = max_hp
+
+func _assign_random_texture() -> void:
+    var sprite := get_node_or_null("Sprite") as Sprite2D
+    if sprite == null:
+        return
+    var idx := randi() % 4 + 1
+    var path := "res://images/prey-%d.png" % idx
+    if ResourceLoader.exists(path):
+        var tex := load(path) as Texture2D
+        if tex:
+            sprite.texture = tex
 
 func _physics_process(delta: float) -> void:
     var avoid := _compute_avoidance()
@@ -66,4 +78,4 @@ func _update_hit_flash(delta: float) -> void:
     if _hit_flash_time == 0.0:
         var sprite := get_node_or_null("Sprite") as Sprite2D
         if sprite:
-            sprite.modulate = Color(0.6, 0.9, 1, 1)
+            sprite.modulate = Color(1, 1, 1, 1)

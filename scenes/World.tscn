@@ -6,9 +6,52 @@
 [ext_resource path="res://scripts/world/spawn_manager.gd" type="Script" id=4]
 [ext_resource path="res://scenes/enemies/predator_small.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scripts/world/predator_spawner.gd" type="Script" id=6]
+[ext_resource path="res://scripts/world/biome_manager.gd" type="Script" id=7]
+[ext_resource path="res://scenes/enemies/diver.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/enemies/diver_cameraman.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/enemies/submarine.tscn" type="PackedScene" id=10]
 
 [node name="World" type="Node2D"]
 script = ExtResource(2)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.85, 0.95, 1, 1)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="LayerBack" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.3, 0.3)
+
+[node name="BackColor" type="Polygon2D" parent="ParallaxBackground/LayerBack"]
+polygon = PackedVector2Array(-4000, -3000, 4000, -3000, 4000, 3000, -4000, 3000)
+color = Color(0.1, 0.25, 0.5, 1)
+
+[node name="LayerMid" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.6, 0.6)
+
+[node name="MidColor" type="Polygon2D" parent="ParallaxBackground/LayerMid"]
+polygon = PackedVector2Array(-3500, -2500, 3500, -2500, 3500, 2500, -3500, 2500)
+color = Color(0.08, 0.3, 0.6, 1)
+
+[node name="BiomeManager" type="Node" parent="."]
+script = ExtResource(7)
+
+[node name="Bubbles" type="GPUParticles2D" parent="."]
+amount = 64
+lifetime = 3.0
+one_shot = false
+preprocess = 1.5
+explosiveness = 0.0
+speed_scale = 1.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -15)
+initial_velocity_min = 40.0
+initial_velocity_max = 80.0
+angular_velocity_min = -5.0
+angular_velocity_max = 5.0
+scale_amount_min = 0.5
+scale_amount_max = 0.9
+position = Vector2(0, 400)
 
 [node name="Player" parent="." instance=ExtResource(1)]
 
@@ -19,5 +62,6 @@ prey_scene = ExtResource(3)
 [node name="PredatorSpawner" type="Node" parent="."]
 script = ExtResource(6)
 predator_scene = ExtResource(5)
+predator_scenes = Array[PackedScene](ExtResource(5), ExtResource(8), ExtResource(9), ExtResource(10))
 
 
