@@ -12,12 +12,13 @@ extends CharacterBody2D
 @export var bite_cooldown_seconds: float = 0.35
 @export var bite_active_duration_seconds: float = 0.12
 
-@export var max_hp: int = 100
+@export var max_hp: int = 25
 var hp: int = max_hp
 
 var biomass: int = 0
 
 @export var sprite_faces_right: bool = false
+@export var rotate_sprite_to_movement: bool = true
 
 var _facing_right: bool = true
 var _bite_shape_offset_x: float = 0.0
@@ -126,14 +127,25 @@ func _update_facing() -> void:
 	if sprite == null:
 		return
 	if velocity.x != 0.0:
-		# Ensure the sprite visually faces the movement direction.
-		# If the source art faces right by default, flip when moving left.
-		# If it faces left by default, flip when moving right.
-		if sprite_faces_right:
-			sprite.flip_h = velocity.x < 0.0
-		else:
-			sprite.flip_h = velocity.x >= 0.0
+		# Maintain facing for hitbox mirroring
 		_facing_right = velocity.x >= 0.0
+
+	# Rotate sprite to 8-direction movement if enabled
+	if rotate_sprite_to_movement and velocity.length() > 0.01:
+		# Godot angle: 0=Right, 90=Down, 180=Left, 270=Up
+		var deg := rad_to_deg(velocity.angle())
+		deg = fposmod(deg, 360.0)
+		# Convert to requested convention: 0=Up, 90=Right, 180=Down, 270=Left
+		deg = fposmod(deg + 180.0, 360.0)
+		# Quantize to nearest 45 degrees (8 directions)
+		var quantized: float = round(deg / 45.0) * 45.0
+		quantized = fposmod(quantized, 360.0)
+		sprite.rotation_degrees = quantized
+		# Disable horizontal flipping when rotating
+		sprite.flip_h = false
+	else:
+		# No rotation when idle
+		sprite.rotation_degrees = sprite.rotation_degrees
 
 	# Mirror bite hitbox to face direction
 	var bite_shape := get_node_or_null("BiteArea/BiteShape") as CollisionShape2D
