@@ -141,11 +141,13 @@ func _update_facing() -> void:
 		var quantized: float = round(deg / 45.0) * 45.0
 		quantized = fposmod(quantized, 360.0)
 		sprite.rotation_degrees = quantized
-		# Disable horizontal flipping when rotating
-		sprite.flip_h = false
 	else:
 		# No rotation when idle
 		sprite.rotation_degrees = sprite.rotation_degrees
+
+	# Flip horizontally when moving right as requested
+	if velocity.x != 0.0:
+		sprite.flip_v = velocity.x > 0.0
 
 	# Mirror bite hitbox to face direction
 	var bite_shape := get_node_or_null("BiteArea/BiteShape") as CollisionShape2D
