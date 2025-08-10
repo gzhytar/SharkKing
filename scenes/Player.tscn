@@ -30,14 +30,13 @@ position = Vector2(-128, 44)
 position = Vector2(-10, -56)
 shape = SubResource("CircleShape2D_3li8b")
 
+[node name="BiteDebug" type="Node2D" parent="BiteArea"]
+position = Vector2(-8, -57)
+script = ExtResource("3")
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 1)
 rotation = 2.7664
-
-[node name="BiteDebug" type="Node2D" parent="."]
-position = Vector2(-164, 2)
-script = ExtResource("3")
-target_shape_path = NodePath("../BiteArea/BiteShape")
 
 [node name="HPBar" type="Node2D" parent="."]
 script = ExtResource("4")
