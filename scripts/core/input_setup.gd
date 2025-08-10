@@ -9,7 +9,7 @@ func _ready() -> void:
     _ensure_action("move_up", [ _key(Key.KEY_W), _key(Key.KEY_UP) ])
     _ensure_action("move_down", [ _key(Key.KEY_S), _key(Key.KEY_DOWN) ])
     # Dash
-    _ensure_action("dash", [ _key(Key.KEY_SHIFT), _key(Key.KEY_SPACE) ])
+    _ensure_action("dash", [ _key(Key.KEY_SHIFT), _key(Key.KEY_SPACE), _mouse(MouseButton.MOUSE_BUTTON_RIGHT) ])
     # Bite/Attack
     _ensure_action("bite", [ _mouse(MouseButton.MOUSE_BUTTON_LEFT), _key(Key.KEY_ENTER) ])
     # Interact & Pause
