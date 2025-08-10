@@ -5,6 +5,8 @@ Pozn.: Pracujeme po malých krocích; vždy řešíme jeden ToDo a teprve po pot
 ## Active ToDo
 - [ ] Milestone 1: Add world bounds/collisions (prevent leaving play area)
 - [ ] Milestone 1: Basic HUD placeholder (HP value text)
+- [ ] Milestone 1: PredatorSmall AI – chase/attack/flee
+- [ ] Milestone 1: Predator spawner in `World.tscn`
 
 ## Recently Completed
 - [done 2025-08-09] Nastavit okno a stretch v `project.godot` (1280×720, canvas_items, keep)
