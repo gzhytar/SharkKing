@@ -63,6 +63,6 @@ prey_scene = ExtResource(3)
 [node name="PredatorSpawner" type="Node" parent="."]
 script = ExtResource(6)
 predator_scene = ExtResource(5)
-predator_scenes = Array[PackedScene](ExtResource(5), ExtResource(8), ExtResource(9), ExtResource(10), ExtResource(11))
+predator_scenes = [ExtResource("5"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")]
 
 
