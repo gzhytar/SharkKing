@@ -8,11 +8,16 @@ extends CharacterBody2D
 @export var dash_duration_seconds: float = 0.15
 @export var dash_cooldown_seconds: float = 1.0
 
+@export var bite_damage: int = 1
+@export var bite_cooldown_seconds: float = 0.35
+
 var _dash_time_remaining: float = 0.0
 var _dash_cooldown_remaining: float = 0.0
+var _bite_cooldown_remaining: float = 0.0
 
 func _physics_process(delta: float) -> void:
 	_update_dash_timers(delta)
+	_update_bite_timer(delta)
 	var input_direction := _get_input_direction()
 	if _is_dashing():
 		_apply_dash_motion(input_direction)
@@ -24,6 +29,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_update_facing()
 	_clamp_to_world_bounds()
+	_maybe_bite()
 
 func _get_input_direction() -> Vector2:
 	var dir := Vector2.ZERO
@@ -107,3 +113,21 @@ func _clamp_to_world_bounds() -> void:
 	pos.x = clampf(pos.x, play_area.position.x, play_area.position.x + play_area.size.x)
 	pos.y = clampf(pos.y, play_area.position.y, play_area.position.y + play_area.size.y)
 	position = pos
+
+func _update_bite_timer(delta: float) -> void:
+	if _bite_cooldown_remaining > 0.0:
+		_bite_cooldown_remaining = max(0.0, _bite_cooldown_remaining - delta)
+
+func _maybe_bite() -> void:
+	if _bite_cooldown_remaining > 0.0:
+		return
+	if not Input.is_action_just_pressed("bite"):
+		return
+	var area := get_node_or_null("BiteArea") as Area2D
+	if area == null:
+		return
+	var bodies := area.get_overlapping_bodies()
+	for b in bodies:
+		if b != null and b.has_method("take_damage"):
+			b.take_damage(bite_damage)
+	_bite_cooldown_remaining = bite_cooldown_seconds
