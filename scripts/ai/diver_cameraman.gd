@@ -9,7 +9,7 @@ enum State { PATROL, OBSERVE, FLEE }
 @export var detection_radius: float = 600.0
 @export var preferred_distance: float = 260.0
 @export var max_hp: int = 4
-@export var flee_hp_threshold: float = 0.4
+@export var flee_hp_threshold: float = 0.1
 @export var loot_min: int = 1
 @export var loot_max: int = 3
 
@@ -76,7 +76,7 @@ func _die() -> void:
     var parent := get_parent()
     if parent:
         var amount := randi_range(loot_min, loot_max)
-        Loot.spawn_pickup(amount, global_position, parent)
+        Loot.spawn_pickup_with_bonus(amount, self, global_position, parent)
     queue_free()
 
 func _find_player() -> Node2D:

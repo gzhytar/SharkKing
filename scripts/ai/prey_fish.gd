@@ -73,7 +73,7 @@ func _die() -> void:
     var parent := get_parent()
     if parent:
         var amount := randi_range(loot_min, loot_max)
-        Loot.spawn_pickup(amount, global_position, parent)
+        Loot.spawn_pickup_with_bonus(amount, self, global_position, parent)
     queue_free()
 
 func _flash_hit() -> void:

@@ -12,7 +12,7 @@ enum State { PATROL, CHASE, ATTACK, FLEE }
 @export var attack_cooldown_seconds: float = 1.5
 @export var contact_damage: int = 2
 @export var max_hp: int = 12
-@export var flee_hp_threshold: float = 0.25
+@export var flee_hp_threshold: float = 0.1
 @export var loot_min: int = 3
 @export var loot_max: int = 6
 
@@ -85,7 +85,7 @@ func _die() -> void:
     var parent := get_parent()
     if parent:
         var amount := randi_range(loot_min, loot_max)
-        Loot.spawn_pickup(amount, global_position, parent)
+        Loot.spawn_pickup_with_bonus(amount, self, global_position, parent)
     queue_free()
 
 func _find_player() -> Node2D:

@@ -10,15 +10,23 @@ extends CharacterBody2D
 
 @export var bite_damage: int = 1
 @export var bite_cooldown_seconds: float = 0.35
+@export var bite_active_duration_seconds: float = 0.12
 
-@export var max_hp: int = 5
+@export var max_hp: int = 100
 var hp: int = max_hp
 
 var biomass: int = 0
 
+@export var sprite_faces_right: bool = false
+
+var _facing_right: bool = true
+var _bite_shape_offset_x: float = 0.0
+
 var _dash_time_remaining: float = 0.0
 var _dash_cooldown_remaining: float = 0.0
 var _bite_cooldown_remaining: float = 0.0
+var _bite_active_time_remaining: float = 0.0
+var _bitten_ids := {}
 
 func _physics_process(delta: float) -> void:
 	_update_dash_timers(delta)
@@ -35,9 +43,23 @@ func _physics_process(delta: float) -> void:
 	_update_facing()
 	_clamp_to_world_bounds()
 	_maybe_bite()
+	_update_bite_active(delta)
 
 func _ready() -> void:
 	add_to_group("player")
+	var bite_area := get_node_or_null("BiteArea") as Area2D
+	if bite_area:
+		bite_area.monitoring = true
+		# Be generous during early implementation: detect all layers
+		bite_area.collision_mask = 0x7FFFFFFF
+		bite_area.position = Vector2.ZERO
+	var bite_shape := get_node_or_null("BiteArea/BiteShape") as CollisionShape2D
+	if bite_shape:
+		_bite_shape_offset_x = absf(bite_shape.position.x)
+		var shape := bite_shape.shape
+		if shape is CircleShape2D:
+			(shape as CircleShape2D).radius = max(48.0, (shape as CircleShape2D).radius)
+			_bite_shape_offset_x = max(_bite_shape_offset_x, 72.0)
 
 func _get_input_direction() -> Vector2:
 	var dir := Vector2.ZERO
@@ -104,7 +126,19 @@ func _update_facing() -> void:
 	if sprite == null:
 		return
 	if velocity.x != 0.0:
-		sprite.scale.x = 1.0 if velocity.x >= 0.0 else -1.0
+		# Ensure the sprite visually faces the movement direction.
+		# If the source art faces right by default, flip when moving left.
+		# If it faces left by default, flip when moving right.
+		if sprite_faces_right:
+			sprite.flip_h = velocity.x < 0.0
+		else:
+			sprite.flip_h = velocity.x >= 0.0
+		_facing_right = velocity.x >= 0.0
+
+	# Mirror bite hitbox to face direction
+	var bite_shape := get_node_or_null("BiteArea/BiteShape") as CollisionShape2D
+	if bite_shape and _bite_shape_offset_x > 0.0:
+		bite_shape.position.x = _bite_shape_offset_x if _facing_right else -_bite_shape_offset_x
 
 func _clamp_to_world_bounds() -> void:
 	var world := get_parent()
@@ -131,14 +165,35 @@ func _maybe_bite() -> void:
 		return
 	if not Input.is_action_just_pressed("bite"):
 		return
+	_bite_active_time_remaining = bite_active_duration_seconds
+	_bitten_ids.clear()
+	_apply_bite_overlaps()
+	_bite_cooldown_remaining = bite_cooldown_seconds
+
+func _update_bite_active(delta: float) -> void:
+	if _bite_active_time_remaining <= 0.0:
+		return
+	_bite_active_time_remaining = max(0.0, _bite_active_time_remaining - delta)
+	_apply_bite_overlaps()
+	if _bite_active_time_remaining == 0.0:
+		_bitten_ids.clear()
+
+func _apply_bite_overlaps() -> void:
 	var area := get_node_or_null("BiteArea") as Area2D
 	if area == null:
 		return
 	var bodies := area.get_overlapping_bodies()
 	for b in bodies:
-		if b != null and b.has_method("take_damage"):
+		if b == null:
+			continue
+		if b == self or (b is Node and b.is_in_group("player")):
+			continue
+		var id := b.get_instance_id()
+		if _bitten_ids.has(id):
+			continue
+		if b.has_method("take_damage"):
 			b.take_damage(bite_damage)
-	_bite_cooldown_remaining = bite_cooldown_seconds
+			_bitten_ids[id] = true
 
 func take_damage(amount: int) -> void:
 	hp = max(0, hp - amount)

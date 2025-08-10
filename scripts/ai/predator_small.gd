@@ -12,7 +12,7 @@ enum PredatorState { IDLE, PATROL, CHASE, ATTACK, FLEE }
 @export var attack_cooldown_seconds: float = 0.8
 @export var contact_damage: int = 1
 @export var max_hp: int = 5
-@export var flee_hp_threshold: float = 0.2  # flee under 20%
+@export var flee_hp_threshold: float = 0.1  # flee under 10%
 @export var loot_min: int = 1
 @export var loot_max: int = 3
 
@@ -85,7 +85,7 @@ func _die() -> void:
     var parent := get_parent()
     if parent:
         var amount := randi_range(loot_min, loot_max)
-        Loot.spawn_pickup(amount, global_position, parent)
+        Loot.spawn_pickup_with_bonus(amount, self, global_position, parent)
     queue_free()
 
 func _find_player() -> Node2D:

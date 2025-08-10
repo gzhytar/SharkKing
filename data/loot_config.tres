@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LootConfig" load_steps=2 format=3 uid="uid://b63hjcqms73we"]
+
+[ext_resource type="Script" uid="uid://bai4sqcrynkny" path="res://scripts/core/loot_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+default_bonus = 0
+group_bonus = {
+"predator": 3
+}
