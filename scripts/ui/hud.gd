@@ -17,9 +17,12 @@ func _update_hp() -> void:
 func _update_counts() -> void:
     var prey_count := get_tree().get_nodes_in_group("prey").size()
     var pred_count := get_tree().get_nodes_in_group("predator").size()
+    var biomass := 0
+    if _player != null and "biomass" in _player:
+        biomass = _player.biomass
     var label := get_node_or_null("Counts") as Label
     if label:
-        label.text = "Prey: %d  Pred: %d" % [prey_count, pred_count]
+        label.text = "Biomass: %d  Prey: %d  Pred: %d" % [biomass, prey_count, pred_count]
 
 func _find_player() -> Node:
     var root := get_tree().current_scene

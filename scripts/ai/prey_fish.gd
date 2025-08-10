@@ -1,10 +1,14 @@
 extends CharacterBody2D
 
+const Loot = preload("res://scripts/core/loot.gd")
+
 @export var swim_speed: float = 240.0
 @export var turn_speed: float = 8.0
 @export var avoid_radius: float = 160.0
 @export var wander_jitter: float = 0.8
 @export var max_hp: int = 1
+@export var loot_min: int = 1
+@export var loot_max: int = 2
 
 var _desired_direction: Vector2 = Vector2.RIGHT
 var _hp: int
@@ -63,7 +67,14 @@ func take_damage(amount: int) -> void:
     _hp = max(0, _hp - amount)
     _flash_hit()
     if _hp <= 0:
-        queue_free()
+        _die()
+
+func _die() -> void:
+    var parent := get_parent()
+    if parent:
+        var amount := randi_range(loot_min, loot_max)
+        Loot.spawn_pickup(amount, global_position, parent)
+    queue_free()
 
 func _flash_hit() -> void:
     _hit_flash_time = 0.12

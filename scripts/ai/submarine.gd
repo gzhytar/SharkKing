@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const Loot = preload("res://scripts/core/loot.gd")
+
 enum State { PATROL, CHASE, ATTACK, FLEE }
 
 @export var patrol_speed: float = 140.0
@@ -11,6 +13,8 @@ enum State { PATROL, CHASE, ATTACK, FLEE }
 @export var contact_damage: int = 2
 @export var max_hp: int = 12
 @export var flee_hp_threshold: float = 0.25
+@export var loot_min: int = 3
+@export var loot_max: int = 6
 
 var _state: State = State.PATROL
 var _hp: int
@@ -75,7 +79,14 @@ func _deal_contact_damage(player: Node2D) -> void:
 func take_damage(amount: int) -> void:
     _hp = max(0, _hp - amount)
     if _hp <= 0:
-        queue_free()
+        _die()
+
+func _die() -> void:
+    var parent := get_parent()
+    if parent:
+        var amount := randi_range(loot_min, loot_max)
+        Loot.spawn_pickup(amount, global_position, parent)
+    queue_free()
 
 func _find_player() -> Node2D:
     var root := get_tree().current_scene

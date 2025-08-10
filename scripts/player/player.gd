@@ -14,6 +14,8 @@ extends CharacterBody2D
 @export var max_hp: int = 5
 var hp: int = max_hp
 
+var biomass: int = 0
+
 var _dash_time_remaining: float = 0.0
 var _dash_cooldown_remaining: float = 0.0
 var _bite_cooldown_remaining: float = 0.0
@@ -33,6 +35,9 @@ func _physics_process(delta: float) -> void:
 	_update_facing()
 	_clamp_to_world_bounds()
 	_maybe_bite()
+
+func _ready() -> void:
+	add_to_group("player")
 
 func _get_input_direction() -> Vector2:
 	var dir := Vector2.ZERO
@@ -140,3 +145,8 @@ func take_damage(amount: int) -> void:
 	if hp <= 0:
 		# TODO: add death/respawn logic later
 		hp = 0
+
+func add_biomass(amount: int) -> void:
+	if amount <= 0:
+		return
+	biomass = max(0, biomass + amount)
