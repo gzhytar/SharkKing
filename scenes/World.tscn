@@ -4,6 +4,8 @@
 [ext_resource path="res://scripts/world/world.gd" type="Script" id=2]
 [ext_resource path="res://scenes/enemies/prey_fish.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/world/spawn_manager.gd" type="Script" id=4]
+[ext_resource path="res://scenes/enemies/predator_small.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scripts/world/predator_spawner.gd" type="Script" id=6]
 
 [node name="World" type="Node2D"]
 script = ExtResource(2)
@@ -13,5 +15,9 @@ script = ExtResource(2)
 [node name="SpawnManager" type="Node" parent="."]
 script = ExtResource(4)
 prey_scene = ExtResource(3)
+
+[node name="PredatorSpawner" type="Node" parent="."]
+script = ExtResource(6)
+predator_scene = ExtResource(5)
 
 
