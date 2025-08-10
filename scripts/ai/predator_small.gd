@@ -18,6 +18,7 @@ var _attack_cd: float = 0.0
 var _patrol_dir: Vector2 = Vector2.RIGHT
 
 func _ready() -> void:
+    add_to_group("predator")
     _hp = max_hp
     randomize()
     _patrol_dir = Vector2(randf() * 2.0 - 1.0, randf() * 2.0 - 1.0).normalized()

@@ -11,6 +11,9 @@ extends CharacterBody2D
 @export var bite_damage: int = 1
 @export var bite_cooldown_seconds: float = 0.35
 
+@export var max_hp: int = 5
+var hp: int = max_hp
+
 var _dash_time_remaining: float = 0.0
 var _dash_cooldown_remaining: float = 0.0
 var _bite_cooldown_remaining: float = 0.0
@@ -131,3 +134,9 @@ func _maybe_bite() -> void:
 		if b != null and b.has_method("take_damage"):
 			b.take_damage(bite_damage)
 	_bite_cooldown_remaining = bite_cooldown_seconds
+
+func take_damage(amount: int) -> void:
+	hp = max(0, hp - amount)
+	if hp <= 0:
+		# TODO: add death/respawn logic later
+		hp = 0

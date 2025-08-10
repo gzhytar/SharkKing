@@ -11,6 +11,7 @@ var _hp: int
 var _hit_flash_time: float = 0.0
 
 func _ready() -> void:
+    add_to_group("prey")
     randomize()
     _desired_direction = Vector2(randf() * 2.0 - 1.0, randf() * 2.0 - 1.0).normalized()
     _hp = max_hp
