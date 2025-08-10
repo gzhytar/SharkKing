@@ -2,6 +2,7 @@
 
 [ext_resource path="res://images/predator-1.png" type="Texture2D" id=1]
 [ext_resource path="res://scripts/ai/predator_small.gd" type="Script" id=2]
+[ext_resource path="res://scripts/ui/hp_bar.gd" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 18.0
@@ -15,5 +16,10 @@ scale = Vector2(0.45, 0.45)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource(1)
+
+[node name="HPBar" type="Node2D" parent="."]
+script = ExtResource(3)
+offset = Vector2(0, -34)
+size = Vector2(42, 6)
 
 

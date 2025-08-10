@@ -1,14 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://cisd4rj5d2kxv"]
+[gd_scene load_steps=7 format=3 uid="uid://cisd4rj5d2kxv"]
 
 [ext_resource type="Texture2D" uid="uid://d0b57jvl7tj8y" path="res://images/baby-shark-270-sm.png" id="1"]
 [ext_resource type="Script" uid="uid://dhuh4g4ftjxn4" path="res://scripts/player/player.gd" id="2"]
 [ext_resource type="Script" uid="uid://7gsnmtgsuure" path="res://scripts/player/bite_debug.gd" id="3"]
+[ext_resource type="Script" uid="uid://7v06gcwhmgjk" path="res://scripts/ui/hp_bar.gd" id="4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
 size = Vector2(278, 102.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3li8b"]
-radius = 129.653
+radius = 93.1343
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("2")
@@ -26,7 +27,7 @@ shape = SubResource("RectangleShape2D_v6fml")
 position = Vector2(-128, 44)
 
 [node name="BiteShape" type="CollisionShape2D" parent="BiteArea"]
-position = Vector2(40, -54)
+position = Vector2(-10, -56)
 shape = SubResource("CircleShape2D_3li8b")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -37,3 +38,8 @@ rotation = 2.7664
 position = Vector2(-164, 2)
 script = ExtResource("3")
 target_shape_path = NodePath("../BiteArea/BiteShape")
+
+[node name="HPBar" type="Node2D" parent="."]
+script = ExtResource("4")
+offset = Vector2(0, -80)
+fg_color = Color(0.2, 0.95, 0.2, 0.95)

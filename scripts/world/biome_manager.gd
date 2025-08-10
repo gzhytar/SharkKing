@@ -1,16 +1,16 @@
 extends Node
 
 # Default to a dark, abyssal tint suitable for volcanic vents
-@export var water_tint: Color = Color(0.08, 0.07, 0.10, 1.0)
+@export var water_tint: Color = Color(0.85, 0.95, 1.0, 1.0)
 @export var bubble_amount: int = 72
 
 # Background texture for current biome. Loaded at runtime to avoid scene parse errors if missing.
 @export var background_texture_path: String = "res://images/biome-volcanic-vent.png"
-@export var background_alpha: float = 0.9
+@export var background_tint: Color = Color(0.9, 0.95, 1.0, 0.8)
 
 # Optional mid-detail overlay (lava cracks). If empty, uses background texture.
-@export var mid_detail_texture_path: String = ""
-@export var mid_detail_alpha: float = 0.6
+@export var mid_detail_texture_path: String = "res://images/biome-volcanic-vent-crack.png"
+@export var mid_detail_tint: Color = Color(1.0, 0.9, 0.8, 0.6)
 
 # Parallax autoscroll speeds (pixels/sec) for subtle motion
 @export var autoscroll_speed_back: Vector2 = Vector2(2.0, 0.0)
@@ -45,7 +45,7 @@ func _ensure_backdrop(world: Node) -> void:
         sprite = Sprite2D.new()
         sprite.name = "VentBackdrop"
         layer_back.add_child(sprite)
-    sprite.modulate = Color(1, 1, 1, clamp(background_alpha, 0.0, 1.0))
+    sprite.modulate = background_tint
     _load_and_fit_texture(sprite)
 
 func _load_and_fit_texture(sprite: Sprite2D) -> void:
@@ -88,7 +88,7 @@ func _ensure_mid_detail(world: Node) -> void:
         sprite = Sprite2D.new()
         sprite.name = "LavaCracks"
         layer.add_child(sprite)
-    sprite.modulate = Color(1, 1, 1, clamp(mid_detail_alpha, 0.0, 1.0))
+    sprite.modulate = mid_detail_tint
     var tex_path := mid_detail_texture_path
     if tex_path.is_empty():
         tex_path = background_texture_path
